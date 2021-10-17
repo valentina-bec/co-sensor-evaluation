@@ -11,7 +11,7 @@ import numpy as np
 plt.rcParams['figure.figsize'] = [10, 4]
 
 #import the data
-data_file = r'C:\Users\valen\tensorEnv\CO\rawdata\measurement.csv'
+data_file = measurement.csv
 df = read_csv(data_file, parse_dates=True, header=0, squeeze=True)
 
 #set date
