@@ -1,22 +1,23 @@
 
-from pandas import read_csv
+
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.dates import DateFormatter
 import datetime
-import numpy as np
+
 
 #plot settings
 plt.rcParams['figure.figsize'] = [10, 4]
 
 #import the data
-data_file = measurement.csv
-df = read_csv(data_file, parse_dates=True, header=0, squeeze=True)
+
+df = pd.read_csv(r'/measurement.csv', parse_dates=True, header=0, squeeze=True)
 
 #set date
-date = df['date']
-date_dt = [datetime.datetime.strptime(item, '%Y-%m-%d %H:%M:%S') for item in date]
+
+df['date'] = [datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S') for item in date]
 df['date_dt'] = pd.DataFrame(date_dt)
 
 # set calibration
@@ -25,13 +26,11 @@ y = [0, 285] # measurement in volt
 beta = (y[1] - y[0]) / (x[1] - x[0])
 alpha = y[1]-float(beta)*x[1]
 
-# calculate the conversion
-co_ppm = ((beta * df['voltage']) + alpha)
-# set in a new raw
-df['co_ppm'] = pd.DataFrame(co_ppm)
+# calculate the conversion in a new raw
+df['co_ppm'] = beta * df['voltage'] + alpha
 
 header = ['date_dt', 'voltage', 'co_ppm']
-print(df[header].head())
+#print(df[header].head())
 
 #---calculate the half an hour mean : hah_mean
 df.index= df['date_dt']
